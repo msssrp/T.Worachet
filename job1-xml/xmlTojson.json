@@ -1,0 +1,19 @@
+{
+    "student" : [
+        {
+            "id": "566666",
+            "stdName": "Robert",
+            "gpa": 3.06,
+            "register":[
+                {
+                    "subject_id": "322433",
+                    "grade": "A"
+                },
+                {
+                    "subject_id": "322236",
+                    "grade": "C"
+                }
+            ]
+        }
+    ]
+}

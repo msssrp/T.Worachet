@@ -1,0 +1,19 @@
+{
+    "customers" : [
+        {
+        "customer": "Mr.Lee",
+        "items" : [
+            {
+                "name" : "A4 paper",
+                "qty": 5,
+                "price": 120
+            },
+            {
+                "name" : "Ruler",
+                "qty": 2,
+                "price": 25
+            }
+        ]
+        }
+    ]
+}
