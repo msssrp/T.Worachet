@@ -15,6 +15,9 @@ app.get('/', (req,res)=>{
 })
 
 app.listen(PORT,()=>{
-    console.log("server running on port :"+ PORT);
+    console.log("server running on port : "+ PORT);
 })
 
+const restaurantRouter = require('./routes/restaurant.router')
+
+app.use(restaurantRouter)
