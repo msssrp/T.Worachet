@@ -1,4 +1,5 @@
 const Restaurant = require('../model/restaurant.model')
+const moment = require('moment')
 
 Restaurant.createRestaurant = async(newRestaurant) =>{
     try {
@@ -43,14 +44,31 @@ Restaurant.deleteRestaurant = async(id) => {
         if(deleteRestaurantByID === 0){
             console.log(`ID NOT FOUND : ${id}`);
             return { error: `ID not found : ${id}`} 
+        }else{
+            console.log(`Deletd ID : ${id}`);
+            return { success: `restaurant ID ${id} deleted`};
         }
-        console.log(`Deletd ID : ${id}`);
-        return { success: `restaurant ID ${id} deleted`};
     } catch (error) {
         console.log(error);
         throw error
     }
 }
 
+Restaurant.updateRestaurant = async(id, updateRestaurant) =>{
+    try {
+        const existingRestaurant = await Restaurant.findOne({where:{id:id}})
+        if(!existingRestaurant){
+            console.log(`ID NOT FOUND : ${id}`);
+            return { error: `ID NOT FOUND : ${id}`}
+        }
+        updateRestaurant.updatedAt = moment.utc().date()
+        await Restaurant.update(updateRestaurant,{where:{id:id}})
+        console.log(`updated ID : ${id}`);
+        return { success: `updated restaurant ID : ${id}`}
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}
 
 module.exports = Restaurant

@@ -20,14 +20,14 @@ const Restaurant = sequelize.define("restaurant",{
         allowNull:false
     },
     createdAt:{
-        type:DataTypes.DATE,
+        type:'TIMESTAMP',
         allowNull:true,
-        defaultValue:DataTypes.NOW
+        defaultValue:sequelize.literal('CURRENT_TIMESTAMP')
     },
     updatedAt:{
-        type:DataTypes.DATE,
+        type:'TIMESTAMP',
         allowNull:true,
-        defaultValue:DataTypes.NOW
+        defaultValue:sequelize.literal('CURRENT_TIMESTAMP')
     },
 })
 
