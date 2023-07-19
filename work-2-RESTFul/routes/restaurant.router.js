@@ -1,74 +1,52 @@
 const express = require('express')
 const router = express.Router()
-const Restaurant = require('../model/restaurant.model')
+const Restaurant = require('../controllers/restaurant.controller')
 
-router.post('/restaurants',(req,res)=>{
-    const newRestaurant = new Restaurant({
-        name: req.body.name,
-        type: req.body.type,
-        image: req.body.image,
-    })
-    
-    Restaurant.create(newRestaurant , (err , result)=>{
-        if(err){
-            return res.status(500).send({
-                msg:err.message || "some error on Internal server"
-            })
-        }
-        res.send(result)
-    })
+
+router.post('/restaurants',async(req,res)=>{
+    try {
+        const newRestaurant = req.body
+        const createRestaurant = await Restaurant.createRestaurant(newRestaurant)
+        res.status(202).json(createRestaurant)    
+    } catch (error) {
+        res.status(500).json({error:"Failed to create new restaurant"})
+    }
 })
 
-router.get("/restaurants",(req,res)=>{
-    Restaurant.getAll((result,err)=>{
-        if(err){
-            return res.status(500).send({
-                msg:err.message || "some error on Internal server"
-            })
-        }
-        res.send(result)
-    })
+router.get('/restaurants',async(req,res)=>{
+    try {
+        const getRestaurants = await Restaurant.getAllRestaurant()
+        res.status(202).json(getRestaurants)
+    } catch (error) {
+        res.status(500).json({error:"Error on Internal Server"})
+    }
 })
 
-router.get('/restaurants/:id',(req,res)=>{
+router.get('/restaurants/:id', async(req,res)=>{
     const id = req.params['id']
-    Restaurant.getByID(id , (result , err)=>{
-        if(err){
-            return res.status(500).send({
-                msg:err.message || "some error on Interal server"
-            })
+    try {
+        const getRestaurantByID = await Restaurant.getRestaurant(id)
+        if(getRestaurantByID.error){
+            return res.status(404).json(getRestaurantByID.error)
         }
-        res.send(result)
-    })
+        res.status(202).json(getRestaurantByID)
+    } catch (error) {
+        res.status(500).json({error:"Error on Internal Server"})
+    }
 })
 
-router.put('/restaurants/:id',(req,res)=>{
+router.delete('/restaurants/:id' , async(req,res)=>{
     const id = req.params['id']
-    const newRestaurant = new Restaurant({
-        name:req.body.name,
-        type: req.body.type,
-        image: req.body.image
-    })
-    Restaurant.updateByID(id,newRestaurant , (result ,err)=>{
-        if(err){
-            return res.status(500).send({
-                msg:err.message || "some error on Internal server"
-            })
+    try {
+        const deleteRestaurantByID = Restaurant.deleteRestaurant(id)
+        if(deleteRestaurantByID.success){
+            return res.status(202).json(deleteRestaurantByID.success)
+        }else{
+            return res.status(404).json(deleteRestaurantByID.error)
         }
-        res.send(result)
-    })
-})
-
-router.delete('/restaurants/:id' , (req,res)=>{
-    const id = req.params['id']
-    Restaurant.deleteByID(id,(result,err)=>{
-        if(err){
-            return res.status(500).send({
-                msg:err.message || "some error on Internal server"
-            })
-        }
-        res.send(result)
-    })
+    } catch (error) {
+        res.status(500).json({error:"Error on Internal Server"})
+    }
 })
 
 module.exports = router
