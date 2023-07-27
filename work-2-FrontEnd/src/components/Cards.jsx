@@ -132,8 +132,8 @@ function Cards() {
                   </svg>
                 </Link>
                 <a onClick={()=>{deleteRestaurant(val.id)}} className="ml-[15px] cursor-pointer inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                            Delete
-                          </a>
+                  Delete
+                </a>
               </div>
             </div>
                );
@@ -141,6 +141,8 @@ function Cards() {
            </div>
          </div>
        </>
+      ): searchValue && filterRestaurants.length === 0 ? (
+        <div className="text-center mt-[150px]">No matching restaurants found.</div>
       ): restaurantData.length > 0 ? (
         <>
           <div className="md:container md:mx-auto mt-[50px]">
