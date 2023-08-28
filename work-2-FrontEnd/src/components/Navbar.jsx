@@ -3,15 +3,11 @@ import { Link } from "react-router-dom";
 import { useSearchContext } from "../SearchContext";
 
 function Navbar() {
+  const { searchValue, setSearchValue } = useSearchContext();
 
-  const { searchValue , setSearchValue} = useSearchContext()
-
-  const handleSearchInputChange = (e) =>{
-    setSearchValue(e.target.value)
-  }
-
-
-
+  const handleSearchInputChange = (e) => {
+    setSearchValue(e.target.value);
+  };
 
   return (
     <>
