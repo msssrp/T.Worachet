@@ -32,6 +32,23 @@ function EditPlayer() {
   const handleOnsubmit = (e) => {
     e.preventDefault();
 
+    if (
+      !updateRestaurant.name ||
+      !updateRestaurant.type ||
+      !updateRestaurant.image
+    ) {
+      return toast.error(`Please insert all the inputs`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+
     const putData = {
       name: updateRestaurant.name,
       type: updateRestaurant.type,
