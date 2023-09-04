@@ -4,8 +4,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function NewRestaurant() {
-
-
   const [newRestaurant, setNewRestaurant] = useState({
     name: "",
     type: "",
@@ -13,7 +11,6 @@ function NewRestaurant() {
   });
 
   console.log(newRestaurant);
-
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
@@ -30,44 +27,41 @@ function NewRestaurant() {
     const postData = {
       name: newRestaurant.name,
       type: newRestaurant.type,
-      image: newRestaurant.image
-    }
+      image: newRestaurant.image,
+    };
 
-
-    axios.post(`http://localhost:8080/restaurants`,postData,{
+    axios
+      .post(`http://localhost:8080/restaurants`, postData, {
         headers: {
-            "Content-Type": "application/json",
-          },
-    }).then((res) => {
-      if (res.status === 202) {
-        toast.success(`Created new Restaurant`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        toast.error(`Can't create`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    });
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.status === 202) {
+          toast.success(`Created new Restaurant`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(`Can't create`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
   };
-
-
-
-  
 
   return (
     <>
@@ -120,8 +114,7 @@ function NewRestaurant() {
                 class="w-[100%] mr-[10px] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
             </div>
-            
-            
+
             <div class="mb-5">
               <label
                 for="name"
@@ -137,8 +130,6 @@ function NewRestaurant() {
                 class="w-[100%] mr-[10px] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
             </div>
-            
-
 
             <div>
               <button

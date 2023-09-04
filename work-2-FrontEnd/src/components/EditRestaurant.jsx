@@ -12,8 +12,6 @@ function EditPlayer() {
 
   const { name, type, image } = queryString.parse(location.search);
 
-
-
   const [updateRestaurant, setUpdateRestaurant] = useState({
     name: "",
     type: "",
@@ -21,7 +19,6 @@ function EditPlayer() {
   });
 
   console.log(updateRestaurant);
-
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
@@ -35,44 +32,61 @@ function EditPlayer() {
   const handleOnsubmit = (e) => {
     e.preventDefault();
 
+    if (
+      !updateRestaurant.name ||
+      !updateRestaurant.type ||
+      !updateRestaurant.image
+    ) {
+      return toast.error(`Please insert all the inputs`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+
     const putData = {
       name: updateRestaurant.name,
       type: updateRestaurant.type,
-      image: updateRestaurant.image
-    }
+      image: updateRestaurant.image,
+    };
 
-    axios.put(`http://localhost:8080/restaurants/${id}`,putData,{
+    axios
+      .put(`http://localhost:8080/restaurants/${id}`, putData, {
         headers: {
-            "Content-Type": "application/json",
-          },
-    }).then((res) => {
-      if (res.status === 202) {
-        toast.success(`updated ${id}`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        toast.error(`Can't Update ${id}`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    });
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.status === 202) {
+          toast.success(`updated ${id}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(`Can't Update ${id}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
   };
-
-
 
   console.log(id);
 
@@ -127,8 +141,7 @@ function EditPlayer() {
                 class="w-[100%] mr-[10px] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
             </div>
-            
-            
+
             <div class="mb-5">
               <label
                 for="name"
@@ -144,8 +157,6 @@ function EditPlayer() {
                 class="w-[100%] mr-[10px] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
             </div>
-            
-
 
             <div>
               <button
