@@ -1,0 +1,43 @@
+.container{
+    padding: 15px;
+    display: flow-root;
+}
+
+.person{
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+}
+
+.imgShrirk{
+    flex-shrink: 0;
+    padding-right: 30px;
+}
+
+img{
+    width: 60;
+    height: 60px;
+    border-radius: 9999px;
+}
+
+.dataFlex{
+    flex: 1;
+    padding-right: 30px;
+}
+
+ul{
+    border-top-width: 1px;
+    border-bottom-width: 0px;
+    border-color: rgb(229 231 235);
+    margin-left: -50px;
+}
+
+li{
+    padding-top: 0.75rem; /* 12px */
+    padding-bottom: 0.75rem; /* 12px */
+    list-style: none;
+}
+
+.dataInline{
+    display: inline-flex;
+}
