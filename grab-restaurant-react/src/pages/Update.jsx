@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 const url = import.meta.env.VITE_BASE_URL;
 const user = import.meta.env.VITE_BASE_USERNAME;
@@ -11,8 +11,9 @@ const config = {
   },
 };
 
-const Add = () => {
-  const [restaurant, setRestaurant] = useState({
+const Update = () => {
+  const [restaurant, setRestaurant] = useState([]);
+  const [newRestaurant, setNewRestaurant] = useState({
     name: "",
     type: "",
     imageUrl: "",
@@ -20,10 +21,25 @@ const Add = () => {
 
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const { id } = useParams();
+
+  const fecthAPI = async () => {
+    try {
+      const res = await axios.get(`${url}/restaurants/${id}`, config);
+      setRestaurant(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fecthAPI();
+  }, [id]);
+ 
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
-    setRestaurant((prev) => ({
+    setNewRestaurant((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -33,17 +49,22 @@ const Add = () => {
     e.preventDefault();
 
     const PostData = {
-      name: restaurant.name,
-      type: restaurant.type,
-      image: restaurant.imageUrl,
+      name: newRestaurant.name,
+      type: newRestaurant.type,
+      image: newRestaurant.imageUrl,
     };
 
     try {
-      const resp = await axios.post(`${url}/restaurants`, PostData, config, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const resp = await axios.put(
+        `${url}/restaurants/${id}`,
+        PostData,
+        config,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (resp.status != 202) {
         return setError(true);
       }
@@ -55,7 +76,7 @@ const Add = () => {
   };
 
   const handleCancel = () => {
-    setRestaurant({
+    setNewRestaurant({
       name: "",
       type: "",
       imageUrl: "",
@@ -82,9 +103,8 @@ const Add = () => {
                   type="text"
                   className="form-control"
                   name="name"
-                  placeholder="input restaurant name"
+                  placeholder={restaurant.name}
                   onChange={handleOnchange}
-                  value={restaurant.name}
                 />
               </div>
               <div className="form-group" style={{ marginTop: "15px" }}>
@@ -93,9 +113,8 @@ const Add = () => {
                   type="text"
                   className="form-control"
                   name="type"
-                  placeholder="input restaurant type"
+                  placeholder={restaurant.type}
                   onChange={handleOnchange}
-                  value={restaurant.type}
                 />
               </div>
               <div className="form-group" style={{ marginTop: "15px" }}>
@@ -104,9 +123,8 @@ const Add = () => {
                   type="text"
                   className="form-control"
                   name="imageUrl"
-                  placeholder="input restaurant image url"
+                  placeholder={restaurant.image}
                   onChange={handleOnchange}
-                  value={restaurant.imageUrl}
                 />
               </div>
               <div style={{ marginTop: "15px" }}>
@@ -115,7 +133,7 @@ const Add = () => {
                   style={{ marginRight: "15px" }}
                   type="submit"
                 >
-                  Create
+                  Update
                 </button>
                 <button className="btn btn-danger" onClick={handleCancel}>
                   Cancel
@@ -132,4 +150,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default Update;
