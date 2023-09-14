@@ -20,6 +20,8 @@ const Add = () => {
 
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
@@ -32,6 +34,10 @@ const Add = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
+    if (!restaurant.name || !restaurant.imageUrl || !restaurant.type) {
+      return setErrorText("please input all the feilds");
+    }
+
     const PostData = {
       name: restaurant.name,
       type: restaurant.type,
@@ -39,15 +45,18 @@ const Add = () => {
     };
 
     try {
+      setIsLoading(true);
       const resp = await axios.post(`${url}/restaurants`, PostData, config, {
         headers: {
           "Content-Type": "application/json",
         },
       });
       if (resp.status != 202) {
+        setIsLoading(false);
         return setError(true);
       }
-      navigate("/");
+      setIsLoading(false);
+      return navigate("/");
     } catch (error) {
       console.log(error);
       setError(true);
@@ -114,14 +123,16 @@ const Add = () => {
                   className="btn btn-success"
                   style={{ marginRight: "15px" }}
                   type="submit"
+                  disabled={isLoading}
                 >
-                  Create
+                  {isLoading ? "Creating" : "Create"}
                 </button>
                 <button className="btn btn-danger" onClick={handleCancel}>
                   Cancel
                 </button>
                 <div className="error" style={{ marginTop: "5px" }}>
                   {error && "something went wrong !!"}
+                  {errorText && errorText}
                 </div>
               </div>
             </form>

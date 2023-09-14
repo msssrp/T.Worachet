@@ -18,6 +18,8 @@ const Update = () => {
     type: "",
     imageUrl: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -35,7 +37,6 @@ const Update = () => {
   useEffect(() => {
     fecthAPI();
   }, [id]);
- 
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +49,10 @@ const Update = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
+    if (!restaurant.name || !restaurant.imageUrl || !restaurant.type) {
+      return setErrorText("please input all the feilds");
+    }
+
     const PostData = {
       name: newRestaurant.name,
       type: newRestaurant.type,
@@ -55,6 +60,7 @@ const Update = () => {
     };
 
     try {
+      setIsLoading(true);
       const resp = await axios.put(
         `${url}/restaurants/${id}`,
         PostData,
@@ -66,9 +72,11 @@ const Update = () => {
         }
       );
       if (resp.status != 202) {
+        setIsLoading(false);
         return setError(true);
       }
-      navigate("/");
+      setIsLoading(false);
+      return navigate("/");
     } catch (error) {
       console.log(error);
       setError(true);
@@ -84,6 +92,8 @@ const Update = () => {
     setError(false);
     navigate("/");
   };
+
+  console.log(isLoading);
 
   return (
     <div className="add-container">
@@ -132,14 +142,16 @@ const Update = () => {
                   className="btn btn-success"
                   style={{ marginRight: "15px" }}
                   type="submit"
+                  disabled={isLoading}
                 >
-                  Update
+                  {isLoading ? "Updating" : "Update"}
                 </button>
                 <button className="btn btn-danger" onClick={handleCancel}>
                   Cancel
                 </button>
                 <div className="error" style={{ marginTop: "5px" }}>
                   {error && "something went wrong !!"}
+                  {errorText && errorText}
                 </div>
               </div>
             </form>

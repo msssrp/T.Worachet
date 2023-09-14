@@ -1,9 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSearchContext } from "../hooks/SearchContext";
 
 const Navbar = () => {
+  const { searchValue, setSearchValue } = useSearchContext();
+
+  const handleSearchInputChange = (e) => {
+    setSearchValue(e.target.value);
+  };
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav
+      className="navbar navbar-expand-lg bg-body-tertiary"
+      style={{ display: "flex", justifyContent: "space-evenly" }}
+    >
       <div className="container-fluid">
         <Link className="navbar-brand" href="#">
           Navbar
@@ -31,11 +40,6 @@ const Navbar = () => {
                 Add
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/search">
-                Search
-              </Link>
-            </li>
           </ul>
           <form className="d-flex" role="search">
             <input
@@ -43,10 +47,9 @@ const Navbar = () => {
               type="search"
               placeholder="Search"
               aria-label="Search"
+              value={searchValue}
+              onChange={handleSearchInputChange}
             />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
           </form>
         </div>
       </div>

@@ -13,16 +13,21 @@ const config = {
 
 const Card = ({ data }) => {
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async (restaurantID) => {
     try {
+      setIsLoading(true);
       const resp = await axios.delete(
         `${url}/restaurants/${restaurantID}`,
         config
       );
       if (resp.status != 202) {
+        setIsLoading(false);
         return setError(true);
       }
+      setIsLoading(false);
+      return window.location.reload(true);
     } catch (error) {
       console.log(error);
       return setError(true);
@@ -44,8 +49,9 @@ const Card = ({ data }) => {
             className="btn btn-danger px-2"
             style={{ marginRight: "15px" }}
             onClick={() => handleDelete(data.id)}
+            disabled={isLoading}
           >
-            Delete
+            {isLoading ? "Deleting" : "Delete"}
           </button>
           <Link to={`/update/${data.id}`} className="btn btn-warning px-2">
             Edit
