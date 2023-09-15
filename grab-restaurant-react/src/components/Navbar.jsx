@@ -8,13 +8,14 @@ const Navbar = () => {
   const handleSearchInputChange = (e) => {
     setSearchValue(e.target.value);
   };
+
   return (
     <nav
       className="navbar navbar-expand-lg bg-body-tertiary"
       style={{ display: "flex", justifyContent: "space-evenly" }}
     >
       <div className="container-fluid">
-        <Link className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="/">
           Navbar
         </Link>
         <button
