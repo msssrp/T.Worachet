@@ -19,7 +19,6 @@ const Update = () => {
     imageUrl: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [errorText, setErrorText] = useState("");
 
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -48,10 +47,7 @@ const Update = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (!restaurant.name || !restaurant.imageUrl || !restaurant.type) {
-      return setErrorText("please input all the feilds");
-    }
+    setIsLoading(true);
 
     const PostData = {
       name: newRestaurant.name,
@@ -60,7 +56,6 @@ const Update = () => {
     };
 
     try {
-      setIsLoading(true);
       const resp = await axios.put(
         `${url}/restaurants/${id}`,
         PostData,
@@ -92,8 +87,6 @@ const Update = () => {
     setError(false);
     navigate("/");
   };
-
-  console.log(isLoading);
 
   return (
     <div className="add-container">
@@ -151,7 +144,6 @@ const Update = () => {
                 </button>
                 <div className="error" style={{ marginTop: "5px" }}>
                   {error && "something went wrong !!"}
-                  {errorText && errorText}
                 </div>
               </div>
             </form>

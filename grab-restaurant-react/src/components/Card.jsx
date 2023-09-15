@@ -16,8 +16,8 @@ const Card = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async (restaurantID) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const resp = await axios.delete(
         `${url}/restaurants/${restaurantID}`,
         config
