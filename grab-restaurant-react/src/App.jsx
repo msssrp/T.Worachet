@@ -1,4 +1,3 @@
-import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Add from "./pages/Add";
@@ -24,5 +23,6 @@ function App() {
     </SearchProvider>
   );
 }
+
 
 export default App;
