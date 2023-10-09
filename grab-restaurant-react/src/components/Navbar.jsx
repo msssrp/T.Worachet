@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSearchContext } from "../hooks/SearchContext";
 
 const Navbar = () => {
   const { searchValue, setSearchValue } = useSearchContext();
-
+  const [hasCookie, setHasCookie] = useState(false)
   const handleSearchInputChange = (e) => {
     setSearchValue(e.target.value);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("u_id")
+    document.cookie = `token=; Max-Age=0`;
+    location.reload()
+  }
+  useEffect(() => {
+    if (document.cookie) {
+      setHasCookie(true)
+      return
+    } else {
+      setHasCookie(false)
+      return
+    }
+  }, [])
 
   return (
     <nav
@@ -42,11 +57,13 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/signIn">Sign In</Link>
-            </li>
-            <li className="nav-item">
               <Link className="nav-link" to="/signUp">Sign Up</Link>
             </li>
+            {hasCookie ? <li className="nav-item">
+              <Link className="nav-link" onClick={handleLogout}>Logout</Link>
+            </li> : <li className="nav-item">
+              <Link className="nav-link" to="/signIn">Sign In</Link>
+            </li>}
           </ul>
           <form className="d-flex" role="search">
             <input

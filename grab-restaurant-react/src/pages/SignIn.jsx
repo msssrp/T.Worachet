@@ -19,9 +19,10 @@ const SignIn = () => {
 
   const [user, setUser] = useState({
     identifier: "",
-    u_password: ""
+    password: ""
   })
 
+  const [isLoading, setIsLoading] = useState(false)
   const handleOnchange = (e) => {
     const { name, value } = e.target
 
@@ -32,8 +33,8 @@ const SignIn = () => {
 
   const handleOnsubmit = (e) => {
     e.preventDefault()
-
-    if (user.identifier.length === 0 || user.u_password.length === 0) {
+    setIsLoading(true)
+    if (user.identifier.length === 0 || user.password.length === 0) {
       toast.error("Please fill the fields", {
         position: "top-right",
         autoClose: 5000,
@@ -44,36 +45,38 @@ const SignIn = () => {
         progress: undefined,
         theme: "light",
       });
+      setIsLoading(false)
     } else {
-      axios.post(`${url}/restaurants/user/login`, user, config, {
+      axios.post(`${url}/user/login`, user, config, {
         headers: {
           "Content-Type": "application/json"
         }
       }).then(async (res) => {
-        if (res.data.status === 'success') {
+        if (res.status === 200) {
           document.cookie = `token=${res.data.token}`;
           const token = document.cookie.split(';').find(c => c.trim().startsWith('token=')).split('=')[1];
 
           try {
             const tokenRes = await axios.get(`${url}/user/auth`, {
               headers: {
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token}`,
               }
             });
 
-            if (tokenRes.data.status === "success") {
+            if (tokenRes.status === 200) {
               localStorage.setItem("u_id", tokenRes.data.decoded.userId);
               navigate("/")
+              setIsLoading(false)
               return
             } else {
-
               console.log("Token invalid");
-
               document.cookie = `token=; Max-Age=0`;
+              setIsLoading(false)
+              return
             }
           } catch (error) {
-
             console.error("Error during token validation:", error);
+            setIsLoading(false)
           }
         }
         else {
@@ -87,11 +90,20 @@ const SignIn = () => {
             progress: undefined,
             theme: "light",
           })
+          setIsLoading(false)
         }
-      }).catch(err => {
-        if (err) {
-          console.log(err);
-        }
+      }).catch(error => {
+        toast.error(`${error.response.data.msg}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+        setIsLoading(false)
       })
     }
   }
@@ -129,7 +141,7 @@ const SignIn = () => {
 
                 <div className="form-outline mb-4">
                   <label className="form-label" htmlFor="form1Example23">Password</label>
-                  <input type="password" id="form1Example23" className="form-control form-control-lg" name="u_password" onChange={handleOnchange} />
+                  <input type="password" id="form1Example23" className="form-control form-control-lg" name="password" onChange={handleOnchange} />
                 </div>
 
                 <div className="d-flex justify-content-around align-items-center mb-4">
@@ -140,7 +152,7 @@ const SignIn = () => {
                   <a href="#!">Forgot password?</a>
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-lg btn-block">Sign in</button>
+                <button type="submit" disabled={isLoading} className="btn btn-primary btn-lg btn-block">Sign in</button>
                 <Link className="btn btn-light btn-lg btn-block" style={{ marginLeft: "15px" }} to="/signUp">Sign Up</Link>
               </form>
             </div>

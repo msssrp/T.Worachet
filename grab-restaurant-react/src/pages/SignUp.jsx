@@ -17,9 +17,9 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const [newUser, setNewUser] = useState({
-    u_username: "",
-    u_email: "",
-    u_password: ""
+    username: "",
+    email: "",
+    password: ""
   })
 
   const [cPassword, setCPassword] = useState("")
@@ -37,12 +37,13 @@ const SignUp = () => {
     }));
   };
 
+
   const handleOnsubmit = (e) => {
     e.preventDefault();
 
     setIsLoading(true)
 
-    if (newUser.u_password !== cPassword) {
+    if (newUser.password !== cPassword) {
       toast.error("Password not match", {
         position: "top-right",
         autoClose: 5000,
@@ -57,7 +58,7 @@ const SignUp = () => {
       return
     }
 
-    if (newUser.u_username.length === 0 || newUser.u_email.length === 0 || newUser.u_password.length === 0) {
+    if (newUser.username.length === 0 || newUser.email.length === 0 || newUser.password.length === 0) {
       toast.error("Please fill the fields", {
         position: "top-right",
         autoClose: 5000,
@@ -71,12 +72,12 @@ const SignUp = () => {
       setIsLoading(false)
       return;
     }
-    axios.post(`${url}/restaurants/user/register`, newUser, config, {
+    axios.post(`${url}/user/register`, newUser, config, {
       headers: {
-        "Content-Tpye": "application/json"
+        "Content-Type": "application/json"
       }
     }).then((res) => {
-      if (res.status === 202) {
+      if (res.status === 200) {
         toast.success(`success`, {
           position: "top-right",
           autoClose: 5000,
@@ -103,7 +104,19 @@ const SignUp = () => {
         setIsLoading(false)
         return
       }
-    });
+    }).catch(error => {
+      toast.error(`${error.response.data.msg}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setIsLoading(false);
+    })
   };
 
 
@@ -140,7 +153,7 @@ const SignUp = () => {
                           <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
                             <label className="form-label" htmlFor="form3Example1c">Your Username</label>
-                            <input type="text" id="form3Example1c" className="form-control" name="u_username" onChange={handleOnchange} />
+                            <input type="text" id="form3Example1c" className="form-control" name="username" onChange={handleOnchange} />
                           </div>
                         </div>
 
@@ -148,7 +161,7 @@ const SignUp = () => {
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
                             <label className="form-label" htmlFor="form3Example3c">Your Email</label>
-                            <input type="email" id="form3Example3c" className="form-control" name="u_email" onChange={handleOnchange} />
+                            <input type="email" id="form3Example3c" className="form-control" name="email" onChange={handleOnchange} />
                           </div>
                         </div>
 
@@ -156,7 +169,7 @@ const SignUp = () => {
                           <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
                             <label className="form-label" htmlFor="form3Example4c">Password</label>
-                            <input type="password" id="form3Example4c" className="form-control" name="u_password" onChange={handleOnchange} />
+                            <input type="password" id="form3Example4c" className="form-control" name="password" onChange={handleOnchange} />
                           </div>
                         </div>
 
