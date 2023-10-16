@@ -13,6 +13,7 @@ const config = {
   },
 };
 import axios from "axios"
+import { useAuthContext } from "../hooks/AuthContext";
 const SignIn = () => {
 
   const navigate = useNavigate()
@@ -22,6 +23,7 @@ const SignIn = () => {
     password: ""
   })
 
+  const { login } = useAuthContext()
   const [isLoading, setIsLoading] = useState(false)
   const handleOnchange = (e) => {
     const { name, value } = e.target
@@ -64,7 +66,7 @@ const SignIn = () => {
             });
 
             if (tokenRes.status === 200) {
-              localStorage.setItem("u_id", tokenRes.data.decoded.userId);
+              login(tokenRes.data.decoded.user)
               navigate("/")
               setIsLoading(false)
               return

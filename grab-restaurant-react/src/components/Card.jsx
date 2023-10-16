@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../hooks/AuthContext";
 const url = import.meta.env.VITE_BASE_URL;
 const user = import.meta.env.VITE_BASE_USERNAME;
 const password = import.meta.env.VITE_BASE_PASSWORD;
@@ -14,7 +15,7 @@ const config = {
 const Card = ({ data }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { user } = useAuthContext()
   const handleDelete = async (restaurantID) => {
     setIsLoading(true);
     try {
@@ -44,19 +45,21 @@ const Card = ({ data }) => {
           <h5 className="title">{data.name}</h5>
           <p className="card-text">{data.type}</p>
         </div>
-        <div className="container-btn">
-          <button
-            className="btn btn-danger px-2"
-            style={{ marginRight: "15px" }}
-            onClick={() => handleDelete(data.id)}
-            disabled={isLoading}
-          >
-            {isLoading ? "Deleting" : "Delete"}
-          </button>
-          <Link to={`/update/${data.id}`} className="btn btn-warning px-2">
-            Edit
-          </Link>
-        </div>
+        {user && user.roles && user.roles.some(role => role.name === "admin") &&
+          <div className="container-btn">
+            <button
+              className="btn btn-danger px-2"
+              style={{ marginRight: "15px" }}
+              onClick={() => handleDelete(data.id)}
+              disabled={isLoading}
+            >
+              {isLoading ? "Deleting" : "Delete"}
+            </button>
+            <Link to={`/update/${data.id}`} className="btn btn-warning px-2">
+              Edit
+            </Link>
+          </div>
+        }
       </div>
     </div>
   );
